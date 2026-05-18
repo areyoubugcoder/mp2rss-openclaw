@@ -1,0 +1,16 @@
+# macOS
+.DS_Store
+
+# Node（如果未来加 scripts/ 下的 JS 工具）
+node_modules/
+npm-debug.log*
+.npm/
+
+# OpenClaw / ClawHub local install metadata（由 CLI 写入，不该进 repo）
+.clawhub/
+.clawdhub/
+
+# IDE
+.vscode/
+.idea/
+*.swp

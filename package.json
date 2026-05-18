@@ -1,0 +1,31 @@
+{
+  "name": "mp2rss",
+  "version": "0.1.0",
+  "description": "Mp2rss CLI Skill —— 微信公众号转 RSS 订阅与文章管理。订阅 / 列出 / 搜索 / 取消订阅微信公众号，查询公众号历史文章，管理 Feed Key 登录态。",
+  "license": "MIT-0",
+  "author": "areyoubugcoder",
+  "homepage": "https://mp2rss.bugcode.dev",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/areyoubugcoder/mp2rss-openclaw.git"
+  },
+  "bugs": {
+    "url": "https://github.com/areyoubugcoder/mp2rss-openclaw/issues"
+  },
+  "keywords": [
+    "mp2rss",
+    "wechat",
+    "weixin",
+    "微信",
+    "公众号",
+    "rss",
+    "feed",
+    "subscription",
+    "订阅",
+    "openclaw",
+    "skill"
+  ],
+  "clawhub": {
+    "acceptLicenseTerms": true
+  }
+}
