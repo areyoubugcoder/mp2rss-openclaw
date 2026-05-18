@@ -8,7 +8,7 @@ description: |
   (2) 用户要查公众号历史文章：「X 这个号最近发了什么」「拉一下 X 的文章」「<X 号> 的历史文章」
   (3) 用户要管理登录态：「登录公众号 RSS 服务」「登出公众号 RSS」「我的 Feed Key 是什么」「我在公众号订阅工具里登录了吗」「在 mp2rss 里登录」
   (4) 用户要安装 / 配置 Mp2rss CLI：「装 mp2rss」「升级 mp2rss」「mp2rss 配置在哪里」
-version: 0.1.0
+version: 0.1.1
 metadata:
   openclaw:
     requires:
