@@ -35,7 +35,7 @@ metadata:
 
 所有命令通过本地 `mp2rss` 二进制调用，**不直接打 HTTP**。Agent 不应自己拼 API 请求，统一走 CLI 子命令 + `-o json` 解析。
 
-**Base URL 由 CLI 自动决定**（命令行 flag > 环境变量 > 配置文件 > 默认 `https://mp2rss.bugcode.dev`），Agent 无需关心。
+**Base URL 由 CLI 自动决定**（命令行 flag > 环境变量 > 配置文件 > 默认 `https://mp2rss.bugcode.dev`）。
 
 ### 🔑 凭证与登录态
 

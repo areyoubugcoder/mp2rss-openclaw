@@ -109,8 +109,6 @@ mp2rss auth logout
 mp2rss auth logout
 ```
 
-下次需要重新跑 `mp2rss auth login`。
-
 ## 凭证优先级
 
 高 → 低：

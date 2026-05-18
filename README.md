@@ -145,4 +145,4 @@ export MP2RSS_API_URL=https://mp2rss.bugcode.dev    # 自托管时需要
 
 ## License
 
-[MIT-0](LICENSE) —— ClawHub 上发布的所有 skill 统一使用此协议。
+[MIT-0](LICENSE)
