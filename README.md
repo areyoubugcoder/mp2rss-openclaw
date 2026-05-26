@@ -2,21 +2,39 @@
 
 [![License: MIT-0](https://img.shields.io/badge/License-MIT--0-blue.svg)](https://opensource.org/licenses/MIT-0)
 
-让 AI Agent 帮你管理微信公众号 RSS 订阅 —— 一句话订阅、自然语言查找、按需读历史文章。
+让 AI Agent 帮你管理 **微信公众号** 与 **X（Twitter）账号** 的 RSS 订阅 —— 一句话订阅、自然语言查找、按需读历史文章 / 推文 / 长文。
 
 本仓库是 [Mp2rss](https://mp2rss.bugcode.dev) 服务的 OpenClaw Agent Skill 包，基于 [`mp2rss` CLI](https://github.com/areyoubugcoder/mp2rss-cli) 实现。
+
+> 📌 文档中 **"X"** 一律指 X（原 Twitter）平台；指代"某个公众号"时一律写作具名形式（如 `<公众号名>`、`某号`），避免歧义。
 
 ---
 
 ## ✨ 核心能力
 
+### 微信公众号（MP）
+
 | 能力 | 说明 |
 |------|------|
-| 📡 **一键订阅公众号** | 发一个公众号文章链接（`mp.weixin.qq.com/s/...`），Agent 自动把整个公众号订阅到你的 Feed |
-| 📋 **自然语言列表与搜索** | 「我订阅了哪些公众号」「搜一下我订阅的财经类」 |
-| 🗑️ **取消订阅** | 「把 X 公众号从订阅里删了」，Agent 自动核对 mpId 后删除 |
-| 📰 **历史文章查询** | 「X 这个号最近发了什么」/「拉一下 X 的文章」 |
-| 🔐 **登录态管理** | 「我的 Feed Key 是什么」「登录公众号 RSS 服务」 |
+| 📡 **一键订阅** | 发一个公众号文章链接（`mp.weixin.qq.com/s/...`），Agent 自动把整个公众号订阅到你的 Feed |
+| 📋 **列表与搜索** | 「我订阅了哪些公众号」「搜一下我订阅的财经类公众号」 |
+| 🗑️ **取消订阅** | 「把 某号 从订阅里删了」，Agent 先核对 mpId 再删 |
+| 📰 **历史文章** | 「某号 最近发了什么」/「拉一下 某号 的文章」 |
+
+### X（Twitter）账号
+
+| 能力 | 说明 |
+|------|------|
+| 🐦 **列出 X 订阅** | 「我订阅了哪些 X 账号」 |
+| 📨 **推文流** | 「@elonmusk 最近发了啥」（Agent 先 `x list` 找到 `xUserId` 再拉推文） |
+| 📝 **长文流** | 「拉一下 某 X 账号的 Articles」 |
+| ⚠️ **订阅 / 取消订阅 X 账号** | **仅在 Web 控制台**（<https://mp2rss.bugcode.dev/>）—— CLI 与 API 都不暴露 X 写类端点，Agent 会引导你去控制台 |
+
+### 通用
+
+| 能力 | 说明 |
+|------|------|
+| 🔐 **登录态管理** | 「我的 Feed Key 是什么」「登录 mp2rss」 |
 | 📤 **结构化输出** | 所有命令支持 `-o json`，Agent 可直接解析做后续处理 |
 
 ---
@@ -43,15 +61,27 @@
 
 ### 翻看历史
 
-> 👤 财经早知道这个号最近发了什么
+> 👤 财经早知道 最近发了什么
 >
 > 🤖 最近 10 篇文章：1. xxx 标题（昨天）2. xxx 标题（前天）……
 
 ### 不想看了
 
-> 👤 把财经早知道从订阅里删了
+> 👤 把 财经早知道 从订阅里删了
 >
 > 🤖 确认删除「财经早知道」（mpId 123456）？已删除 ✓
+
+### 看大 V 推文
+
+> 👤 @elonmusk 最近发了啥？
+>
+> 🤖 （先 `x list` 拿到 xUserId 44196397）最近 5 条推文：1. ……
+
+### 想订阅一个 X 账号
+
+> 👤 帮我订阅 @paulg 这个号
+>
+> 🤖 X 账号的订阅 / 取消订阅只能在 Web 控制台操作。打开 https://mp2rss.bugcode.dev/「订阅管理 → X」搜索 paulg 完成订阅；订阅好我就能用 `mp2rss x posts/articles` 帮你拉内容。
 
 ---
 
@@ -111,16 +141,33 @@ export MP2RSS_API_URL=https://mp2rss.bugcode.dev    # 自托管时需要
 
 ## 🛠 子命令速查
 
+### 通用
+
 | 命令 | 说明 |
 |------|------|
 | `mp2rss auth login [-k <key>] [--no-browser]` | 登录（三种模式：浏览器 / Feed Key 直传 / 远程） |
 | `mp2rss auth status [-o json]` | 查登录态、Feed Key 来源、最近登录时间 |
 | `mp2rss auth logout` | 清空 Feed Key |
+
+### 微信公众号
+
+| 命令 | 说明 |
+|------|------|
 | `mp2rss mp subscribe <article-url> [-o json]` | 订阅；参数必须是 `mp.weixin.qq.com/s/...` 文章 URL |
-| `mp2rss mp list [-q <kw>] [-p <page>] [--page-size <n>]` | 列出订阅 |
+| `mp2rss mp list [-q <kw>] [-p <page>] [--page-size <n>]` | 列出公众号订阅 |
 | `mp2rss mp search <keyword>` | `mp list -q` 语法糖 |
-| `mp2rss mp remove <mpId> [-y]` | 取消订阅 |
+| `mp2rss mp remove <mpId> [-y]` | 取消订阅公众号 |
 | `mp2rss mp articles <mpId> [-p <page>] [--page-size <n>]` | 查公众号历史文章 |
+
+### X（Twitter）
+
+| 命令 | 说明 |
+|------|------|
+| `mp2rss x list [-q <kw>] [-p <page>] [--page-size <n>]` | 列出已订阅的 X 账号 |
+| `mp2rss x posts <xUserId> [-p <page>] [--page-size <n>]` | 拉 X 账号推文流 |
+| `mp2rss x articles <xUserId> [-p <page>] [--page-size <n>]` | 拉 X 账号长文流 |
+
+> X 账号**搜索 / 订阅 / 取消订阅**仅 Web 控制台支持，CLI 与 Open API 都不暴露这些写类端点。
 
 完整字段、JSON shape 与 Agent 行为规范见 [SKILL.md](SKILL.md) 和 [references/](references/) 子文档。
 
@@ -128,18 +175,20 @@ export MP2RSS_API_URL=https://mp2rss.bugcode.dev    # 自托管时需要
 
 ## ⚠️ 重要约束
 
-- **订阅时传的是文章 URL** —— 不是公众号名、不是二维码、不是公众号主页。识别不到合法文章 URL 时 Agent 应反问用户索要任意一篇文章链接
+- **订阅公众号传的是文章 URL** —— 不是公众号名、不是二维码、不是公众号主页。识别不到合法文章 URL 时 Agent 应反问用户索要任意一篇文章链接
 - **`mpId` 是 int64** —— JS 环境解析 JSON 时需先把 `mpId` 替换为字符串再 `JSON.parse`，否则精度丢失
-- **取消订阅前先核对 mpId** —— 用 `mp list -q` / `mp search` 拿到准确 mpId 再删，避免误删
+- **`xUserId` 是字符串** —— 虽然内容是数字串，API 契约即字符串形态，无需转换；注意不要传 `@handle`
+- **取消订阅公众号前先核对 mpId** —— 用 `mp list -q` / `mp search` 拿到准确 mpId 再删，避免误删
+- **X 写类操作不可达** —— 用户要订阅 / 取消订阅 X 账号时，Agent 必须引导到 Web 控制台「订阅管理 → X」，不要尝试构造 CLI 命令
 - **`auth login` 不支持 `-o json`** —— 仅输出文本反馈，其它子命令均支持
 
 ---
 
 ## 🔗 相关
 
-- [Mp2rss 服务](https://mp2rss.bugcode.dev) —— 微信公众号 RSS 订阅服务本身
+- [Mp2rss 服务](https://mp2rss.bugcode.dev) —— 微信公众号 / X 账号 RSS 订阅服务
 - [`mp2rss` CLI](https://github.com/areyoubugcoder/mp2rss-cli) —— Go 命令行客户端（Skill 调用的底层）
-- [Mp2rss 文档站](https://areyoubugcoder.github.io/Mp2RSS/) —— CLI 与 API 完整文档
+- [Mp2rss 文档站](https://areyoubugcoder.github.io/Mp2RSS/) —— 服务介绍、Open API 与 CLI 完整文档
 
 ---
 

@@ -26,7 +26,7 @@
 | `1` | 通用错误（网络） | DNS 失败 / TCP 连不上 / 超时 | 报告 + 建议稍后重试；检查网络 |
 | `2` | 参数错误 | flag 拼错 / 必填参数缺失 / `mp subscribe` URL 不是 `mp.weixin.qq.com/s/...` | 解析 stderr 给用户具体提示；URL 错就反问用户索要正确文章链接 |
 | `3` | 鉴权失败 | Feed Key 错 / 过期 / 未配置 / HTTP 401 | 引导用户跑 `mp2rss auth login`（见 [auth.md](auth.md)）；**不要反复重试** |
-| `4` | 资源不存在 | mpId 错 / 文章 URL 失效 / HTTP 404 | 用 `mp list` 重新核对 mpId；或提示用户更换文章链接 |
+| `4` | 资源不存在 | mpId 错 / 文章 URL 失效 / **xUserId 未订阅**（X 读类端点要求已订阅）/ HTTP 404 | MP：用 `mp list` 重新核对 mpId 或更换文章链接；X：先 `x list` 确认是否已订阅，未订阅的话引导用户去 Web 控制台「订阅管理 → X」 |
 | `5` | 上游不可用 | API 服务挂 / HTTP 5xx | 报告 + 建议稍后重试 |
 
 ## HTTP code 对应
@@ -101,3 +101,14 @@ $ echo $?
 ```
 
 Agent → 用 `mp list` 核对正确 mpId。
+
+### X 账号未订阅
+
+```bash
+$ mp2rss x posts 999999999 -o json
+{"error":{"message":"X account is not subscribed","code":404}}
+$ echo $?
+4
+```
+
+Agent → 提示用户：`mp2rss x posts / x articles` **只能查已订阅 X 账号**；订阅 X 账号必须去 Web 控制台「订阅管理 → X」操作（CLI 与 API 都不暴露 X 写类端点）。先 `mp2rss x list` 看一下是否已订阅 / `xUserId` 是否抄错。
