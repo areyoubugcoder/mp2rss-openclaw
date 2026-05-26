@@ -6,8 +6,6 @@
 
 本仓库是 [Mp2rss](https://mp2rss.bugcode.dev) 服务的 OpenClaw Agent Skill 包，基于 [`mp2rss` CLI](https://github.com/areyoubugcoder/mp2rss-cli) 实现。
 
-> 📌 文档中 **"X"** 一律指 X（原 Twitter）平台；指代"某个公众号"时一律写作具名形式（如 `<公众号名>`、`某号`），避免歧义。
-
 ---
 
 ## ✨ 核心能力
